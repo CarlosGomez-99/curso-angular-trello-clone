@@ -11,6 +11,7 @@ import { Card } from '@models/cards.model';
 })
 export class BoardsService {
   apiUrl = environment.API_URL;
+  bufferSpace = 65535;
 
   constructor(private http: HttpClient) {}
 
@@ -22,11 +23,12 @@ export class BoardsService {
 
   getPosition(cards: Card[], currentIndex: number) {
     if (cards.length === 1) {
-      return 'is new';
+      return this.bufferSpace;
     }
 
     if (cards.length > 1 && currentIndex === 0) {
-      return 'is the top';
+      const onTopPosition = cards[1].position / 2;
+      return onTopPosition;
     }
 
     const lastIndexOfArray = cards.length - 1;
@@ -36,11 +38,15 @@ export class BoardsService {
       currentIndex > 0 &&
       currentIndex < lastIndexOfArray
     ) {
-      return 'is the middle';
+      const previousCardPosition = cards[currentIndex - 1].position;
+      const nextCardPosition = cards[currentIndex + 1].position;
+      const middlePosition = (previousCardPosition + nextCardPosition) / 2;
+      return middlePosition;
     }
 
     if (currentIndex === lastIndexOfArray) {
-      return 'is the bottom';
+      const onBottomPosition = cards[currentIndex - 1].position + this.bufferSpace;
+      return onBottomPosition;
     }
 
     return 0;
