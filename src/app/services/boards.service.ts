@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 
 import { environment } from '@environments/environment';
 import { checkToken } from '@interceptors/token.interceptor';
+import { Card } from '@models/cards.model';
 
 @Injectable({
   providedIn: 'root',
@@ -17,5 +18,31 @@ export class BoardsService {
     return this.http.get<Board>(`${this.apiUrl}/api/v1/boards/${id}`, {
       context: checkToken(),
     });
+  }
+
+  getPosition(cards: Card[], currentIndex: number) {
+    if (cards.length === 1) {
+      return 'is new';
+    }
+
+    if (cards.length > 1 && currentIndex === 0) {
+      return 'is the top';
+    }
+
+    const lastIndexOfArray = cards.length - 1;
+
+    if (
+      cards.length > 2 &&
+      currentIndex > 0 &&
+      currentIndex < lastIndexOfArray
+    ) {
+      return 'is the middle';
+    }
+
+    if (currentIndex === lastIndexOfArray) {
+      return 'is the bottom';
+    }
+
+    return 0;
   }
 }
