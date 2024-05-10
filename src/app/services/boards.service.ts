@@ -1,4 +1,4 @@
-import { Board } from '@models/board.model';
+import { Board, BoardCreate } from '@models/board.model';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
@@ -17,6 +17,12 @@ export class BoardsService {
 
   getBoard(id: Board['id']) {
     return this.http.get<Board>(`${this.apiUrl}/api/v1/boards/${id}`, {
+      context: checkToken(),
+    });
+  }
+
+  createBoard(boardCreate: BoardCreate) {
+    return this.http.post<Board>(`${this.apiUrl}/api/v1/boards`, boardCreate, {
       context: checkToken(),
     });
   }
@@ -45,7 +51,8 @@ export class BoardsService {
     }
 
     if (currentIndex === lastIndexOfArray) {
-      const onBottomPosition = cards[currentIndex - 1].position + this.bufferSpace;
+      const onBottomPosition =
+        cards[currentIndex - 1].position + this.bufferSpace;
       return onBottomPosition;
     }
 
