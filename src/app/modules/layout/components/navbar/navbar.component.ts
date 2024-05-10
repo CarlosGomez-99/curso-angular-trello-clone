@@ -4,7 +4,7 @@ import {
   faBell,
   faInfoCircle,
   faClose,
-  faAngleDown
+  faAngleDown,
 } from '@fortawesome/free-solid-svg-icons';
 
 import { AuthService } from '@services/auth.service';
@@ -25,14 +25,14 @@ export class NavbarComponent {
 
   user$ = this.authService.user$;
 
-  constructor(
-    private authService: AuthService,
-    private router: Router
-  ) {}
+  constructor(private authService: AuthService, private router: Router) {}
 
   logout() {
     this.authService.logout();
     this.router.navigate(['/login']);
   }
 
+  closeOverlay(event: boolean) {
+    this.isOpenOverlayCreateBoard = event;
+  }
 }

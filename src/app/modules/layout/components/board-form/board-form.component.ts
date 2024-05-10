@@ -1,5 +1,5 @@
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import { BoardsService } from '@services/boards.service';
 import { BoardCreate } from '@models/board.model';
@@ -12,6 +12,7 @@ import { Router } from '@angular/router';
 })
 export class BoardFormComponent {
   faCheck = faCheck;
+  @Output() closeOverlay = new EventEmitter<boolean>();
 
   form = this.FormBuilder.nonNullable.group({
     title: ['', [Validators.required]],
@@ -32,7 +33,7 @@ export class BoardFormComponent {
       const { title, backgroundColor } = this.form.value;
       let boardCreate = { title, backgroundColor } as BoardCreate;
       this.BoardsService.createBoard(boardCreate).subscribe((board) => {
-        console.log('board', board);
+        this.closeOverlay.next(false);
         this.router.navigate(['/app/boards', board.id]);
       });
     } else {
