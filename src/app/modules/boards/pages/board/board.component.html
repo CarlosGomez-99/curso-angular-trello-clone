@@ -47,7 +47,9 @@
             >
             </textarea>
             <div class="flex space-x-2">
-              <app-btn color="primary" (click)="createCard(list)">Add card</app-btn>
+              <app-btn color="primary" (click)="createCard(list)"
+                >Add card</app-btn
+              >
               <app-btn color="light" (click)="closeCardForm(list)">
                 <fa-icon [icon]="faClose"></fa-icon>
               </app-btn>
@@ -55,9 +57,30 @@
           </div>
         </div>
       </div>
-      <app-btn color="light" class="shrink-0" (click)="addColumn()"
-        >Add Column</app-btn
-      >
+      <div class="shrink-0">
+        <app-btn
+          *ngIf="!showListForm"
+          color="light"
+          (click)="showListForm = !showListForm"
+          >Add another list</app-btn
+        >
+        <div class="w-full" *ngIf="showListForm">
+          <textarea
+            [formControl]="inputList"
+            class="w-full rounded text-xs border-b-gray-400 border-b-2"
+            placeholder="Enter a title for this card..."
+          >
+          </textarea>
+          <div class="flex space-x-2">
+            <app-btn color="primary" (click)="addList()"
+              >Add card</app-btn
+            >
+            <app-btn color="light" (click)="showListForm = !showListForm">
+              <fa-icon [icon]="faClose"></fa-icon>
+            </app-btn>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
