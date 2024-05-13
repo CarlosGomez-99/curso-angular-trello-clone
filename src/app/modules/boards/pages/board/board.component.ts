@@ -16,6 +16,7 @@ import { Card } from '@models/cards.model';
 import { CardsService } from '@services/cards.service';
 import { List } from '@models/list.model';
 import { faClose } from '@fortawesome/free-solid-svg-icons';
+import { ListsService } from '@services/lists.service';
 
 @Component({
   selector: 'app-board',
@@ -49,7 +50,8 @@ export class BoardComponent implements OnInit {
     private dialog: Dialog,
     private route: ActivatedRoute,
     private boardsService: BoardsService,
-    private cardsService: CardsService
+    private cardsService: CardsService,
+    private listsService: ListsService
   ) {}
 
   ngOnInit(): void {
@@ -87,8 +89,20 @@ export class BoardComponent implements OnInit {
 
   addList() {
     const title = this.inputList.value;
-    console.log(title);
-    
+    if (title && this.board) {
+      const boardId = this.board.id;
+      const position = this.boardsService.getPositionForNewItem(this.board.lists);
+      this.listsService.createList({
+        title,
+        boardId,
+        position
+      })
+      .subscribe((list) => {
+        this.getBoard(boardId);
+        this.inputList.reset();
+        this.showListForm = false;
+      });
+    }
   }
 
   openDialog(card: Card) {
@@ -139,7 +153,7 @@ export class BoardComponent implements OnInit {
       if (this.board) {
         const boardId = this.board.id;
         const listId = list.id;
-        const position = this.boardsService.getPositionForNewCard(list.cards);
+        const position = this.boardsService.getPositionForNewItem(list.cards);
         this.cardsService
           .createCard({
             title,

@@ -5,6 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '@environments/environment';
 import { checkToken } from '@interceptors/token.interceptor';
 import { Card } from '@models/cards.model';
+import { List } from '@models/list.model';
 
 @Injectable({
   providedIn: 'root',
@@ -59,14 +60,14 @@ export class BoardsService {
     return 0;
   }
 
-  getPositionForNewCard(cards: Card[]) {
-    if (cards.length === 0) {
+  getPositionForNewItem(elements: Card[] | List[]) {
+    if (elements.length === 0) {
       return this.bufferSpace;
     }
 
-    const lastIndexOfArray = cards.length - 1;
+    const lastIndexOfArray = elements.length - 1;
     const onBottomPosition =
-      cards[lastIndexOfArray].position + this.bufferSpace;
+      elements[lastIndexOfArray].position + this.bufferSpace;
     return onBottomPosition;
   }
 }
