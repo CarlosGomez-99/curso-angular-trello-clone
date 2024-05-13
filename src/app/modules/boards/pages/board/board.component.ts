@@ -17,6 +17,7 @@ import { CardsService } from '@services/cards.service';
 import { List } from '@models/list.model';
 import { faClose } from '@fortawesome/free-solid-svg-icons';
 import { ListsService } from '@services/lists.service';
+import { BACKGROUNDS } from '@models/colors.models';
 
 @Component({
   selector: 'app-board',
@@ -43,6 +44,7 @@ export class BoardComponent implements OnInit {
     validators: [Validators.required],
   });
   showListForm = false;
+  colorBackground = BACKGROUNDS;
 
   faClose = faClose;
 
@@ -91,17 +93,20 @@ export class BoardComponent implements OnInit {
     const title = this.inputList.value;
     if (title && this.board) {
       const boardId = this.board.id;
-      const position = this.boardsService.getPositionForNewItem(this.board.lists);
-      this.listsService.createList({
-        title,
-        boardId,
-        position
-      })
-      .subscribe((list) => {
-        this.getBoard(boardId);
-        this.inputList.reset();
-        this.showListForm = false;
-      });
+      const position = this.boardsService.getPositionForNewItem(
+        this.board.lists
+      );
+      this.listsService
+        .createList({
+          title,
+          boardId,
+          position,
+        })
+        .subscribe((list) => {
+          this.getBoard(boardId);
+          this.inputList.reset();
+          this.showListForm = false;
+        });
     }
   }
 
@@ -177,5 +182,16 @@ export class BoardComponent implements OnInit {
         showCardForm: false,
       }));
     }
+  }
+
+  get colorsBackground() {
+    if (this.board) {
+      const classes = this.colorBackground[this.board.backgroundColor];
+      if (classes) {
+        return classes;
+      }
+      return {};
+    }
+    return {};
   }
 }
