@@ -6,6 +6,8 @@ import { environment } from '@environments/environment';
 import { checkToken } from '@interceptors/token.interceptor';
 import { Card } from '@models/cards.model';
 import { List } from '@models/list.model';
+import { BehaviorSubject } from 'rxjs';
+import { Colors } from '@models/colors.models';
 
 @Injectable({
   providedIn: 'root',
@@ -13,6 +15,7 @@ import { List } from '@models/list.model';
 export class BoardsService {
   apiUrl = environment.API_URL;
   bufferSpace = 65535;
+  backgroundColor$ = new BehaviorSubject<Colors>('sky');
 
   constructor(private http: HttpClient) {}
 
@@ -69,5 +72,9 @@ export class BoardsService {
     const onBottomPosition =
       elements[lastIndexOfArray].position + this.bufferSpace;
     return onBottomPosition;
+  }
+
+  setBoardBackgroundColor(color: Colors) {
+    this.backgroundColor$.next(color);
   }
 }
