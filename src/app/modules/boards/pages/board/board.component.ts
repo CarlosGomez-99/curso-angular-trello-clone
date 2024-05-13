@@ -13,6 +13,7 @@ import { BoardsService } from '@services/boards.service';
 import { Board } from '@models/board.model';
 import { Card } from '@models/cards.model';
 import { CardsService } from '@services/cards.service';
+import { List } from '@models/list.model';
 
 @Component({
   selector: 'app-board',
@@ -109,5 +110,14 @@ export class BoardComponent implements OnInit {
     this.cardsService.updateCard(id, { position, listId }).subscribe((card) => {
       console.log(card);
     });
+  }
+
+  openCardForm(list: List) {
+    if (this.board?.lists) {
+      this.board.lists = this.board?.lists.map((listD) => ({
+        ...listD,
+        showCardForm: listD.id === list.id,
+      }));
+    }
   }
 }
