@@ -58,4 +58,15 @@ export class BoardsService {
 
     return 0;
   }
+
+  getPositionForNewCard(cards: Card[]) {
+    if (cards.length === 0) {
+      return this.bufferSpace;
+    }
+
+    const lastIndexOfArray = cards.length - 1;
+    const onBottomPosition =
+      cards[lastIndexOfArray].position + this.bufferSpace;
+    return onBottomPosition;
+  }
 }

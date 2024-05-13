@@ -5,13 +5,15 @@ export interface Card {
   title: string;
   position: number;
   list: List;
-  description: string;
+  description?: string;
 }
 
-export interface UpdateCardDto {
-  title?: string;
-  description?: string;
-  position?: number;
-  listId?: string | number;
+export interface CreateCardDto extends Omit<Card, 'id' | 'list'> {
+  listId: string | number;
+  boardId: string;
+}
+
+export interface UpdateCardDto extends Partial<Omit<Card, 'id' | 'list'>> {
+  listId?: number | string;
   boardId?: string;
 }

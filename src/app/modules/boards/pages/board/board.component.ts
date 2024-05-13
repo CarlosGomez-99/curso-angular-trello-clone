@@ -129,11 +129,29 @@ export class BoardComponent implements OnInit {
     }
   }
 
-  createCard() {
+  createCard(list: List) {
     const title = this.inputCard.value;
-    console.log(title);
-    
+    if (title) {
+      if (this.board) {
+        const boardId = this.board.id;
+        const listId = list.id;
+        const position = this.boardsService.getPositionForNewCard(list.cards);
+        this.cardsService
+          .createCard({
+            title,
+            listId,
+            boardId,
+            position,
+          })
+          .subscribe((card) => {
+            this.getBoard(boardId);
+            this.inputCard.reset();
+            list.showCardForm = false;
+          });
+      }
+    }
   }
+
   closeCardForm(list: List) {
     if (this.board?.lists) {
       this.board.lists = this.board?.lists.map((listD) => ({
